@@ -1,0 +1,41 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Entorno de desarrollo
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Dependencias y módulos
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+
+# Archivos temporales
+*.log
+*.tmp
+*.temp
+.cache/
+.tmp/
+
+# Archivos compilados
+dist/
+build/
+.vercel/
+
+# Variables de entorno locales
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Otros
+*.bak
+*.swp
+*~
