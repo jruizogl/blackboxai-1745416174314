@@ -1,0 +1,3 @@
+@echo off
+echo Iniciando servidor para el Dashboard de Licencias Microsoft...
+python server.py
