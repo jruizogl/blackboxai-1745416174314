@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Sistema de Licencias Microsoft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-box {
+            animation: fadeIn 0.5s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-box w-full max-w-md p-8 bg-white rounded-lg shadow-lg">
+            <div class="flex justify-center mb-8">
+                <div class="flex items-center">
+                    <img src="https://i.postimg.cc/BvwTXwHR/Logo-Open-Gate.png" alt="Open Gate Logo" class="h-10 mr-4">
+                    <i class="fa-brands fa-microsoft text-[#00a4ef] text-3xl"></i>
+                </div>
+            </div>
+            
+            <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">
+                Sistema de Gestión de Licencias
+            </h2>
+            
+            <div id="login-error" class="mb-4 bg-red-100 text-red-700 p-3 rounded hidden">
+                <i class="fas fa-exclamation-circle mr-2"></i>
+                <span id="error-message">Usuario o contraseña incorrectos</span>
+            </div>
+            
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Correo Electrónico</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-envelope text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            placeholder="usuario@empresa.com"
+                            required
+                            class="pl-10 w-full py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                        />
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-lock text-gray-400"></i>
+                        </div>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="••••••••"
+                            required
+                            class="pl-10 w-full py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" 
+                        />
+                        <button 
+                            type="button" 
+                            id="toggle-password" 
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+                            tabindex="-1"
+                        >
+                            <i class="fas fa-eye text-gray-400 hover:text-gray-600"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <div>
+                    <button 
+                        type="submit" 
+                        id="login-button" 
+                        class="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    >
+                        <span id="login-text">Iniciar Sesión</span>
+                        <span id="login-spinner" class="hidden ml-2">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </span>
+                    </button>
+                </div>
+                
+                <div class="flex items-center justify-center mt-2">
+                    <div class="text-sm text-gray-600">
+                        ¿No tienes una cuenta? Contacta al administrador.
+                    </div>
+                </div>
+            </form>
+            
+            <div class="mt-6">
+                <div class="mt-4 text-center text-sm text-gray-500">
+                    <p>Utilizando el acceso como usuario "Administrador":</p>
+                    <div class="bg-gray-100 p-2 rounded mt-1">
+                        <div><strong>Email:</strong> admin@empresa.com</div>
+                        <div><strong>Contraseña:</strong> admin123</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Notifications -->
+    <div id="notificationContainer" class="fixed bottom-4 right-4 space-y-2"></div>
+    
+    <script src="login.js"></script>
+</body>
+</html>
