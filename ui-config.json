@@ -1,0 +1,24 @@
+{
+  "licenseTypes": [
+    "Office 365 Business Basic",
+    "Office 365 Business Standard",
+    "Office 365 Business Premium",
+    "Microsoft 365 E3",
+    "Microsoft 365 E5"
+  ],
+  "licenseStatuses": [
+    "Activa",
+    "Inactiva",
+    "Pendiente"
+  ],
+  "userRoles": [
+    "Administrador",
+    "Usuario"
+  ],
+  "catalogSections": [
+    "Áreas",
+    "Ubicaciones",
+    "Bodegas",
+    "Puestos"
+  ]
+}
