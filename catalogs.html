@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogos - Dashboard de Licencias Microsoft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+    <script src="config.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .catalog-card {
+            transition: all 0.3s ease;
+        }
+        .catalog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-sm border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fa-brands fa-microsoft text-[#00a4ef] text-3xl mr-3"></i>
+                    <h1 class="text-xl font-semibold text-gray-800">Catálogos</h1>
+                </div>
+                <div class="flex items-center">
+                    <a href="index.html" class="flex items-center text-gray-600 hover:text-gray-800 mr-4">
+                        <i class="fas fa-tachometer-alt mr-2"></i>
+                        Dashboard
+                    </a>
+                    <a href="detailed-view.html" class="flex items-center text-gray-600 hover:text-gray-800 mr-4">
+                        <i class="fas fa-list-alt mr-2"></i>
+                        Vista Detallada
+                    </a>
+                    <button id="syncButton" class="flex items-center bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Actualizar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6">Gestión de Catálogos</h2>
+
+        <!-- Catalog Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <!-- Areas Card -->
+            <div class="catalog-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                <div class="bg-blue-500 text-white p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Áreas</h3>
+                    <button onclick="openAddModal('area')" class="bg-white text-blue-500 rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="p-4 h-64 overflow-y-auto">
+                    <ul id="areasList" class="space-y-2">
+                        <li class="text-gray-500 text-center">Cargando áreas...</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 border-t border-gray-200 p-3 text-center text-sm text-gray-600">
+                    Total: <span id="areasCount">0</span> áreas
+                </div>
+            </div>
+
+            <!-- Locations Card -->
+            <div class="catalog-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                <div class="bg-green-500 text-white p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Ubicaciones</h3>
+                    <button onclick="openAddModal('location')" class="bg-white text-green-500 rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="p-4 h-64 overflow-y-auto">
+                    <ul id="locationsList" class="space-y-2">
+                        <li class="text-gray-500 text-center">Cargando ubicaciones...</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 border-t border-gray-200 p-3 text-center text-sm text-gray-600">
+                    Total: <span id="locationsCount">0</span> ubicaciones
+                </div>
+            </div>
+
+            <!-- Warehouses Card -->
+            <div class="catalog-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                <div class="bg-purple-500 text-white p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Bodegas</h3>
+                    <button onclick="openAddModal('warehouse')" class="bg-white text-purple-500 rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="p-4 h-64 overflow-y-auto">
+                    <ul id="warehousesList" class="space-y-2">
+                        <li class="text-gray-500 text-center">Cargando bodegas...</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 border-t border-gray-200 p-3 text-center text-sm text-gray-600">
+                    Total: <span id="warehousesCount">0</span> bodegas
+                </div>
+            </div>
+
+            <!-- Positions Card -->
+            <div class="catalog-card bg-white rounded-lg shadow-sm overflow-hidden border border-gray-200">
+                <div class="bg-yellow-500 text-white p-4 flex justify-between items-center">
+                    <h3 class="text-lg font-semibold">Puestos</h3>
+                    <button onclick="openAddModal('position')" class="bg-white text-yellow-500 rounded-full p-1 w-8 h-8 flex items-center justify-center">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="p-4 h-64 overflow-y-auto">
+                    <ul id="positionsList" class="space-y-2">
+                        <li class="text-gray-500 text-center">Cargando puestos...</li>
+                    </ul>
+                </div>
+                <div class="bg-gray-50 border-t border-gray-200 p-3 text-center text-sm text-gray-600">
+                    Total: <span id="positionsCount">0</span> puestos
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add Catalog Item Modal -->
+    <div id="catalogModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center px-6 py-4 border-b">
+                <h3 class="text-xl font-semibold" id="modalTitle">Añadir Área</h3>
+                <button onclick="closeCatalogModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <form id="catalogForm" class="space-y-4">
+                    <input type="hidden" id="catalogId">
+                    <input type="hidden" id="catalogType">
+                    
+                    <div>
+                        <label for="catalogName" class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
+                        <input type="text" id="catalogName" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" required>
+                    </div>
+                    
+                    <!-- Only shown for warehouses -->
+                    <div id="locationSelectContainer" class="hidden">
+                        <label for="warehouseLocation" class="block text-sm font-medium text-gray-700 mb-1">Ubicación</label>
+                        <select id="warehouseLocation" class="w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                            <option value="">Seleccionar ubicación</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3 pt-4">
+                        <button type="button" onclick="closeCatalogModal()" class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-500 rounded-md text-white hover:bg-blue-600">
+                            Guardar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+            <div class="flex justify-between items-center px-6 py-4 border-b">
+                <h3 class="text-xl font-semibold">Confirmar Eliminación</h3>
+                <button onclick="closeDeleteModal()" class="text-gray-400 hover:text-gray-600">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="mb-4" id="deleteConfirmText">¿Estás seguro de que deseas eliminar este elemento? Esta acción no se puede deshacer.</p>
+                <div class="bg-yellow-100 text-yellow-800 p-3 rounded mb-4 hidden" id="deleteWarning">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    <span>Este elemento está siendo utilizado y no puede ser eliminado.</span>
+                </div>
+                <input type="hidden" id="deleteId">
+                <input type="hidden" id="deleteType">
+                <div class="flex justify-end space-x-3">
+                    <button type="button" onclick="closeDeleteModal()" class="px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-50">
+                        Cancelar
+                    </button>
+                    <button type="button" id="confirmDeleteBtn" onclick="confirmDelete()" class="px-4 py-2 bg-red-500 rounded-md text-white hover:bg-red-600">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notifications -->
+    <div id="notificationContainer" class="fixed bottom-4 right-4 space-y-2"></div>
+
+    <script src="catalogs.js"></script>
+</body>
+</html>
